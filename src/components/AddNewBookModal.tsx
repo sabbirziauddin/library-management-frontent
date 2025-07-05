@@ -27,7 +27,11 @@ import {
   SelectValue,
 } from "../components/ui/select";
 import { useAddBookMutation } from "@/redux/api/libraryApi";
+import { useNavigate } from "react-router";
+
+import { toast } from "sonner";
 import { useState } from "react";
+
 interface AddBookFormData {
   title: string;
   author: string;
@@ -37,10 +41,8 @@ interface AddBookFormData {
   isAvailable: string;
   description: string;
 }
-import { toast } from "sonner";
 
 export default function AddNewBookModal() {
-  const [open, setOpen] = useState(false);
   const [addBook, { isLoading }] = useAddBookMutation();
   const form = useForm<AddBookFormData>({
     defaultValues: {
@@ -53,6 +55,8 @@ export default function AddNewBookModal() {
       description: "",
     },
   });
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const onSubmit = async (data: AddBookFormData) => {
     try {
@@ -68,8 +72,9 @@ export default function AddNewBookModal() {
 
       console.log("book added successfully", result);
 
-      form.reset(); // Clear form
-      setOpen(false); // Close dialog
+      form.reset();
+      setOpen(false); // Clear form
+      navigate("/bookList");
       toast.success("Book added successfully!");
     } catch (error: any) {
       toast.error("Failed to add book. Please try again.");
@@ -241,3 +246,4 @@ export default function AddNewBookModal() {
     </Dialog>
   );
 }
+

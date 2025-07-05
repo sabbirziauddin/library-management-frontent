@@ -30,10 +30,12 @@ import {
 import { format } from "date-fns";
 import { CalendarIcon,BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export default function BorrowBookModal({ book }) {
   const [borrowBook, { isLoading }] = useBorrowBookMutation();
+  const navigate = useNavigate();
 
   const form = useForm({
     defaultValues: {
@@ -49,13 +51,15 @@ export default function BorrowBookModal({ book }) {
     }
 
     try {
-      const borrowBookData=await borrowBook({
+      const borrowBookData = await borrowBook({
         bookId: book._id,
         quantity: Number(data.quantity),
         dueDate: data.dueDate.toISOString(),
       }).unwrap();
-      console.log("from borrow book data",borrowBookData);
-
+      console.log("from borrow book data", borrowBookData);
+      toast.success("Book borrowed successfully!");
+      // Redirect to borrow summary page
+      navigate("/borrowSummary");
       form.reset();
     } catch (err) {
       console.error("Borrow failed:", err);
@@ -65,7 +69,12 @@ export default function BorrowBookModal({ book }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="text-green-500" variant="ghost" alt="Borrow Book" title="Borrow Book">
+        <Button
+          className="text-green-500"
+          variant="ghost"
+          alt="Borrow Book"
+          title="Borrow Book"
+        >
           <BookOpen size={16} />
         </Button>
       </DialogTrigger>
@@ -121,7 +130,6 @@ export default function BorrowBookModal({ book }) {
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) => date < new Date()}
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>

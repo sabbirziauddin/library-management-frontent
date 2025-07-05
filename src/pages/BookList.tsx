@@ -1,6 +1,6 @@
 import AddNewBookModal from '@/components/AddNewBookModal';
 import EditBookModal from '@/components/EditBookModal';
-import { Edit, Trash2, BookOpen } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import {
   useDeleteBookMutation,
   useGetBooksQuery,

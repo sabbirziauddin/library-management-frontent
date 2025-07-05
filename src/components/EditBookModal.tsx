@@ -30,7 +30,24 @@ import { useUpdateBookMutation } from "@/redux/api/libraryApi";
 import { useState } from "react";
 import { Edit } from "lucide-react";
 
-export default function EditBookModal({ book }) {
+interface Book {
+  _id: string;
+  title: string;
+  author: string;
+  genre:
+    | "FICTION"
+    | "NON_FICTION"
+    | "SCIENCE"
+    | "HISTORY"
+    | "BIOGRAPHY"
+    | "FANTASY";
+  isbn: string;
+  description?: string;
+  copies: number;
+  available: boolean;
+}
+
+export default function EditBookModal({ book }: { book: Book }) {
   const [updateBook, { isLoading }] = useUpdateBookMutation();
   const [open, setOpen] = useState(false);
 
@@ -46,7 +63,15 @@ export default function EditBookModal({ book }) {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: {
+    title: string;
+    author: string;
+    genre: Book["genre"];
+    isbn: string;
+    description?: string;
+    copies: number | string;
+    isAvailable: string;
+  }) => {
     const updated = {
       ...data,
       copies: Number(data.copies),
@@ -73,12 +98,7 @@ export default function EditBookModal({ book }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          className="text-blue-500"
-          alt="Edit Book"
-          title="Edit Book"
-        >
+        <Button variant="ghost" className="text-blue-500" title="Edit Book">
           <Edit size={16} />
         </Button>
       </DialogTrigger>

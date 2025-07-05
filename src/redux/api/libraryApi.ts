@@ -68,6 +68,15 @@ export const libraryApi = createApi({
       }),
       invalidatesTags: ["Books", "Borrow"], // refresh both
     }),
+    getBorrowSummary: builder.query<
+      { book: { title: string; isbn: string }; totalQuantity: number }[],
+      void
+    >({
+      query: () => "/borrow",
+      providesTags: ["Borrow"],
+      transformResponse: (response: any) => response.data,
+    }),
+
     // Add other endpoints: updateBook, borrowBook, getBorrowSummary etc.
   }),
 });
@@ -78,4 +87,5 @@ export const {
   useDeleteBookMutation,
   useUpdateBookMutation,
   useBorrowBookMutation,
+  useGetBorrowSummaryQuery,
 } = libraryApi;
