@@ -21,7 +21,7 @@ interface ApiResponse {
 
 export const libraryApi = createApi({
   reducerPath: "libraryApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:4000/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_BASE_URL }),
   tagTypes: ["Books", "Borrow"],
   endpoints: (builder) => ({
     getBooks: builder.query<any[], void>({
