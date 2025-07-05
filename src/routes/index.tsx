@@ -2,7 +2,6 @@ import App from "@/App";
 import BookList from "@/pages/BookList";
 import AddNewBook from "@/pages/AddNewBook";
 import BorrowSummary from "@/pages/BorrowSummary";
-import Users from "@/pages/Users";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -13,10 +12,6 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: BookList,
-      },
-      {
-        path: "/users",
-        Component: Users,
       },
 
       {

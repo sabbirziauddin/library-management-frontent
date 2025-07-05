@@ -33,7 +33,14 @@ import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
-export default function BorrowBookModal({ book }) {
+interface Book {
+  _id: string;
+  title: string;
+  copies: number;
+  // Add other fields as needed
+}
+
+export default function BorrowBookModal({ book }: { book: Book }) {
   const [borrowBook, { isLoading }] = useBorrowBookMutation();
   const navigate = useNavigate();
 
@@ -44,7 +51,7 @@ export default function BorrowBookModal({ book }) {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: { quantity: number; dueDate: Date }) => {
     if (data.quantity > book.copies) {
       alert("Not enough copies available");
       return;
@@ -69,12 +76,7 @@ export default function BorrowBookModal({ book }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          className="text-green-500"
-          variant="ghost"
-          alt="Borrow Book"
-          title="Borrow Book"
-        >
+        <Button className="text-green-500" variant="ghost" title="Borrow Book">
           <BookOpen size={16} />
         </Button>
       </DialogTrigger>
