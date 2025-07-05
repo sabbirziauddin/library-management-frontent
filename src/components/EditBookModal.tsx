@@ -27,9 +27,12 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { useUpdateBookMutation } from "@/redux/api/libraryApi";
+import { useState } from "react";
+import { Edit } from "lucide-react";
 
 export default function EditBookModal({ book }) {
   const [updateBook, { isLoading }] = useUpdateBookMutation();
+  const [open, setOpen] = useState(false);
 
   const form = useForm({
     defaultValues: {
@@ -52,7 +55,7 @@ export default function EditBookModal({ book }) {
 
     try {
       await updateBook({ id: book._id, updatedData: updated }).unwrap();
-      form.reset({
+      /*  form.reset({
         title: "",
         author: "",
         genre: "",
@@ -60,17 +63,23 @@ export default function EditBookModal({ book }) {
         description: "",
         copies: "",
         isAvailable: "false",
-      }); 
+      }); */
+      setOpen(false);
     } catch (err) {
       console.error("Update failed:", err);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="text-blue-500">
-          Edit
+        <Button
+          variant="ghost"
+          className="text-blue-500"
+          alt="Edit Book"
+          title="Edit Book"
+        >
+          <Edit size={16} />
         </Button>
       </DialogTrigger>
       <DialogContent>

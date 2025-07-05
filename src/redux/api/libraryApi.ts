@@ -1,24 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-
 // Define proper types
 interface Book {
-    _id: string;
-    title: string;
-    author: string;
-    genre: string;
-    isbn: string;
-    description: string;
-    copies: number;
-    available: boolean;
-    createdAt: string;
-    updatedAt: string;
-  }
-  interface ApiResponse {
-    success: boolean;
-    message: string;
-    data: Book[];
-  }
+  _id: string;
+  title: string;
+  author: string;
+  genre: string;
+  isbn: string;
+  description: string;
+  copies: number;
+  available: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+interface ApiResponse {
+  success: boolean;
+  message: string;
+  data: Book[];
+}
 
 export const libraryApi = createApi({
   reducerPath: "libraryApi",
@@ -47,7 +46,10 @@ export const libraryApi = createApi({
       }),
       invalidatesTags: ["Books"],
     }),
-    updateBook: builder.mutation<any,{id:string,updatedData:Partial<Book>}>({
+    updateBook: builder.mutation<
+      any,
+      { id: string; updatedData: Partial<Book> }
+    >({
       query: ({ id, updatedData }) => ({
         url: `/books/${id}`,
         method: "PATCH",
@@ -55,8 +57,25 @@ export const libraryApi = createApi({
       }),
       invalidatesTags: ["Books"],
     }),
+    borrowBook: builder.mutation<
+      any,
+      { bookId: string; quantity: number; dueDate: string }
+    >({
+      query: (body) => ({
+        url: "/borrow",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Books", "Borrow"], // refresh both
+    }),
     // Add other endpoints: updateBook, borrowBook, getBorrowSummary etc.
   }),
 });
 
-export const { useGetBooksQuery, useAddBookMutation, useDeleteBookMutation,useUpdateBookMutation } = libraryApi;
+export const {
+  useGetBooksQuery,
+  useAddBookMutation,
+  useDeleteBookMutation,
+  useUpdateBookMutation,
+  useBorrowBookMutation,
+} = libraryApi;
