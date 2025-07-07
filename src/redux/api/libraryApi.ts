@@ -13,11 +13,6 @@ interface Book {
   createdAt: string;
   updatedAt: string;
 }
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data: Book[];
-}
 
 export const libraryApi = createApi({
   reducerPath: "libraryApi",
@@ -25,15 +20,16 @@ export const libraryApi = createApi({
   tagTypes: ["Books", "Borrow"],
   endpoints: (builder) => ({
     getBooks: builder.query<any[], void>({
-      query: () => "/books",
+      query: () => "/api/books",
       providesTags: ["Books"],
-      transformResponse: (response: ApiResponse) => {
-        return response.data; // Extract the books array from response.data
+      transformResponse: (response: any) => {
+        // Handle the nested structure: response.data.books
+        return response.data.books || response.data; // Fallback to response.data if books property doesn't exist
       },
     }),
     addBook: builder.mutation<any, Partial<any>>({
       query: (body) => ({
-        url: "/books",
+        url: "/api/books",
         method: "POST",
         body,
       }),
@@ -41,7 +37,7 @@ export const libraryApi = createApi({
     }),
     deleteBook: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/books/${id}`,
+        url: `/api/books/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Books"],
@@ -51,7 +47,7 @@ export const libraryApi = createApi({
       { id: string; updatedData: Partial<Book> }
     >({
       query: ({ id, updatedData }) => ({
-        url: `/books/${id}`,
+        url: `/api/books/${id}`,
         method: "PATCH",
         body: updatedData,
       }),
@@ -62,7 +58,7 @@ export const libraryApi = createApi({
       { bookId: string; quantity: number; dueDate: string }
     >({
       query: (body) => ({
-        url: "/borrow",
+        url: "/api/borrow",
         method: "POST",
         body,
       }),
@@ -72,7 +68,7 @@ export const libraryApi = createApi({
       { book: { title: string; isbn: string }; totalQuantity: number }[],
       void
     >({
-      query: () => "/borrow",
+      query: () => "/api/borrow",
       providesTags: ["Borrow"],
       transformResponse: (response: any) => response.data,
     }),
