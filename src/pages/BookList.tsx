@@ -1,5 +1,4 @@
-import AddNewBookModal from '@/components/AddNewBookModal';
-import EditBookModal from '@/components/EditBookModal';
+import EditBookModal from "@/components/EditBookModal";
 import { Trash2 } from "lucide-react";
 import {
   useDeleteBookMutation,
@@ -9,6 +8,7 @@ import BorrowBookModal from "@/components/BorrowBookModal";
 
 const BookList = () => {
   const { data: books, isLoading } = useGetBooksQuery();
+
   const [deleteBook] = useDeleteBookMutation();
   console.log("fetch data from backend", books);
 
@@ -19,7 +19,6 @@ const BookList = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold mb-4">All Books</h2>
-        <AddNewBookModal></AddNewBookModal>
       </div>
       <table className="w-full table-auto border">
         <thead className="bg-gray-100">

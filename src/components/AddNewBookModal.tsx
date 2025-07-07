@@ -1,22 +1,21 @@
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "../components/ui/form";
 import { Textarea } from "../components/ui/textarea";
 import {
@@ -30,7 +29,6 @@ import { useAddBookMutation } from "@/redux/api/libraryApi";
 import { useNavigate } from "react-router";
 
 import { toast } from "sonner";
-import { useState } from "react";
 
 interface AddBookFormData {
   title: string;
@@ -42,7 +40,13 @@ interface AddBookFormData {
   description: string;
 }
 
-export default function AddNewBookModal() {
+export default function AddNewBookModal({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const [addBook, { isLoading }] = useAddBookMutation();
   const form = useForm<AddBookFormData>({
     defaultValues: {
@@ -55,9 +59,8 @@ export default function AddNewBookModal() {
       description: "",
     },
   });
-  const [open, setOpen] = useState(false);
+  //const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-
   const onSubmit = async (data: AddBookFormData) => {
     try {
       const result = await addBook({
@@ -73,7 +76,7 @@ export default function AddNewBookModal() {
       console.log("book added successfully", result);
 
       form.reset();
-      setOpen(false); // Clear form
+      onOpenChange(false);
       navigate("/bookList");
       toast.success("Book added successfully!");
     } catch (error: any) {
@@ -85,12 +88,7 @@ export default function AddNewBookModal() {
     }
   };
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="bg-blue-400 hover:bg-blue-200" variant="outline">
-          Add New Book
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add New Book</DialogTitle>
