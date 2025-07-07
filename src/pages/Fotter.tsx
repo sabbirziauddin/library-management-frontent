@@ -7,7 +7,7 @@ const Footer = () => {
         </p>
         <div className="flex gap-4 mt-2 md:mt-0">
           <a
-            href="https://github.com/your-repo"
+            href="https://github.com/sabbirziauddin"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-blue-500 text-sm"
